@@ -1,7 +1,7 @@
 ﻿create or replace function visitantecondominio(rg_visit varchar, data_venc Date, nome_visit varchar, id_morad int, placa_visit varchar, boolean_foto int) returns text as
 $$
 
-
+/* gasggsdsadg */
     
 begin
 /* Visitante existe?*/
