@@ -37,22 +37,20 @@ begin
 			INSERT INTO veiculo (id,data_cadastro,id_visitante,marca,modelo,nome_responsavel,placa,situacao_veiculo,utiliza_vaga_fixa,id_colaborador,id_terceiro,cor,id_prestadorservico,observacao,renavan,tipoveiculo,id_condominiovisitante,id_moradia,id_municipio,id_morador) 
 			VALUES (nextval('public.veiculo_seq'),(select CURRENT_DATE),null,'SEM MARCA','SEM MODELO',null,placa_visit,'A',null,null,null,'SEM COR',null,null,null,'2',(select id from condominiovisitante where rg = rg_visit),null,null,null);
 
-			return 'veiculo inserido!';
-			
+						
 			end if;
 
 			if (boolean_foto =0)
 			then
 		
-			return 'Update Data Moradia sem Foto na Pasta!';
+			return 'Update Data Moradia sem Foto!';
 
 			
-
 			else
 			 update "condominiovisitante" set "foto_visitante" = (select lo_import('C:/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
 
 			
-			return 'Update Data Moradia com Foto na Pasta!';
+			return 'Update Data Moradia com Foto!';
 
 			end if;
 
@@ -74,14 +72,13 @@ begin
 			INSERT INTO veiculo (id,data_cadastro,id_visitante,marca,modelo,nome_responsavel,placa,situacao_veiculo,utiliza_vaga_fixa,id_colaborador,id_terceiro,cor,id_prestadorservico,observacao,renavan,tipoveiculo,id_condominiovisitante,id_moradia,id_municipio,id_morador) 
 			VALUES (nextval('public.veiculo_seq'),(select CURRENT_DATE),null,'SEM MARCA','SEM MODELO',null,placa_visit,'A',null,null,null,'SEM COR',null,null,null,'2',(select id from condominiovisitante where rg = rg_visit),null,null,null);
 
-			return 'veiculo inserido!';
 			
 			end if;
 
 			if (boolean_foto =0)
 			then
 		
-			return 'Sem foto!';
+			return 'Insert em Nova Moradia sem Foto na Pasta!';
 
 			
 
@@ -89,18 +86,13 @@ begin
 			 update "condominiovisitante" set "foto_visitante" = (select lo_import('C:/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
 
 			
-			return 'update foto';
+			return 'Insert em Nova Moradia com Foto na Pasta';
 
 			end if;
 
-
-
-
-		return 'insert do da pessoa no joincondominiovisitantemoradia';
 	end if;	
 
-	return 'Existe!!';
-              
+	              
 			
 		
 /* Se não */
@@ -118,7 +110,7 @@ Values (nextval('public.condominiovisitante_seq'),null,null,null,null,nome_visit
 		if (boolean_foto =0)
 			then
 		
-			return 'Sem foto!';
+			return 'Insert Novo Visitante Condominio Sem foto!';
 
 			
 
@@ -126,13 +118,13 @@ Values (nextval('public.condominiovisitante_seq'),null,null,null,null,nome_visit
 			 update "condominiovisitante" set "foto_visitante" = (select lo_import('C:/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
 
 			
-			return 'update foto';
+			return 'Insert Novo Visitante Condominio com Foto';
 
 			end if;
 
 		
 	
-    return 'Insert novo!';
+
 end if;
 
 end;
@@ -143,7 +135,7 @@ language 'plpgsql';
 
 
 
-select visitantecondominio('RGTESTE06','2019-12-06','NOME TESTE 06',9,'GAY0007', 1)
+select visitantecondominio('RGTESTE12','2019-12-06','NOME TESTE 12',14,'GAY0015',1)
 
 
 update "condominiovisitante" set "foto_visitante" = (select lo_import('C:/Fotos/123456789222.jpg')) where rg= '123456789222';
