@@ -51,7 +51,7 @@ begin
 			return  return_id;
 			
 			else
-			 update "condominiovisitante" set "foto_visitante" = (select lo_import('C:/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
+			 update "condominiovisitante" set "foto_visitante" = (select lo_import('//srv-dominio/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
 
 			
 			select id into return_id from condominiovisitante where rg = rg_visit;
@@ -85,7 +85,7 @@ begin
 			return  return_id;	
 
 			else
-			 update "condominiovisitante" set "foto_visitante" = (select lo_import('C:/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
+			 update "condominiovisitante" set "foto_visitante" = (select lo_import('//srv-dominio/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
 			
 			select id into return_id from condominiovisitante where rg = rg_visit;
 		
@@ -116,7 +116,7 @@ Values (nextval('public.condominiovisitante_seq'),null,null,null,null,nome_visit
 			
 
 			else
-			 update "condominiovisitante" set "foto_visitante" = (select lo_import('C:/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
+			 update "condominiovisitante" set "foto_visitante" = (select lo_import('//srv-dominio/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
 						
 			select id into return_id from condominiovisitante where rg = rg_visit;
 		
