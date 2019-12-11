@@ -1,12 +1,23 @@
-﻿create or replace function visitantecondominio(rg_visit varchar, data_venc Date, nome_visit varchar, id_morad int, placa_visit varchar, boolean_foto int) returns text as
-$$
+﻿CREATE OR REPLACE FUNCTION public.visitantecondominio(
+    IN rg_visit character varying,
+    IN data_venc date,
+    IN nome_visit character varying,
+    IN id_morad integer,
+    IN placa_visit character varying,
+    IN boolean_foto integer)
+  RETURNS TABLE(id_visitante integer, mensagens character varying) AS
+$BODY$
 
 Declare
 
 	return_id bigint;
-
-    
+	
+	    
 begin
+
+ CREATE TEMP TABLE IF NOT EXISTS retorno(id_visitante_return int, mensagem varchar(80));
+
+
 /* Visitante existe?*/
     if exists (select cv.rg
                   from   condominiovisitante as cv
@@ -43,20 +54,29 @@ begin
 						
 			end if;
 
-			if (boolean_foto =0)
+			if (boolean_foto=0)
 			then
 		
 			select id into return_id from condominiovisitante where rg = rg_visit;
-		
-			return  return_id;
+			
+			insert into  retorno (id_visitante_return, mensagem) values (return_id , 'Sucesso sem Foto');
+
+			return query select * from retorno;
+			
+			drop table retorno;
+			 		
+			
 			
 			else
 			 update "condominiovisitante" set "foto_visitante" = (select lo_import('//srv-dominio/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
 
-			
 			select id into return_id from condominiovisitante where rg = rg_visit;
-		
-			return return_id;
+			
+			insert into  retorno (id_visitante_return, mensagem) values (return_id , 'Sucesso com Foto');
+
+			return query select * from retorno;
+
+			drop table retorno;
 
 			end if;            
 
@@ -81,16 +101,25 @@ begin
 			then
 		
 			select id into return_id from condominiovisitante where rg = rg_visit;
+			
+			insert into  retorno (id_visitante_return, mensagem) values (return_id , 'Sucesso sem Foto');			 
 		
-			return  return_id;	
+			return query select * from retorno ;	
+
+			drop table retorno;
 
 			else
-			 update "condominiovisitante" set "foto_visitante" = (select lo_import('//srv-dominio/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
+
+			update "condominiovisitante" set "foto_visitante" = (select lo_import('//srv-dominio/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
 			
 			select id into return_id from condominiovisitante where rg = rg_visit;
+			
+			insert into  retorno (id_visitante_return, mensagem) values (return_id , 'Sucesso com Foto');			 
 		
-			return  return_id;
+			return query select * from retorno ;	
 
+			drop table retorno;
+			
 			end if;
 	end if;	              
 			
@@ -108,32 +137,37 @@ Values (nextval('public.condominiovisitante_seq'),null,null,null,null,nome_visit
 		VALUES (nextval('public.veiculo_seq'),(select CURRENT_DATE),null,'SEM MARCA','SEM MODELO',null,placa_visit,'A',null,null,null,'SEM COR',null,null,null,'2',(select id from condominiovisitante where rg = rg_visit),null,null,null);
 	
 		if (boolean_foto =0)
+			
 			then
 
 			select id into return_id from condominiovisitante where rg = rg_visit;
-		
-			return  return_id;
 			
+			insert into  retorno (id_visitante_return, mensagem) values (return_id , 'Sucesso sem Foto');
+		
+			return query select * from retorno;
+			
+			drop table retorno;
 
 			else
-			 update "condominiovisitante" set "foto_visitante" = (select lo_import('//srv-dominio/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
-						
-			select id into return_id from condominiovisitante where rg = rg_visit;
-		
-			return  return_id;
 
+			update "condominiovisitante" set "foto_visitante" = (select lo_import('//srv-dominio/Fotos/'||rg_visit||'.jpg')) where rg= rg_visit;
+			
+			select id into return_id from condominiovisitante where rg = rg_visit;
+						
+			insert into  retorno (id_visitante_return, mensagem) values (return_id , 'Sucesso com Foto');
+		
+			return query select * from retorno;
+			
+			drop table retorno;
+			
 			end if;
 	
 end if;
 
 end;
-$$
-language 'plpgsql';
-
-
-
-select visitantecondominio('RGTESTE24','2019-12-09','NOME TESTE 24',14,'GAY0024',0)
-
-
-update "condominiovisitante" set "foto_visitante" = (select lo_import('C:/Fotos/123456789222.jpg')) where rg= '123456789222';
-DROP FUNCTION visitantecondominio(character varying,date,character varying,integer,character varying,integer) first.
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;
+ALTER FUNCTION public.visitantecondominio(character varying, date, character varying, integer, character varying, integer)
+  OWNER TO postgres;
